@@ -1,0 +1,81 @@
+Bootstrap: library
+From: ubuntu:20.04
+Stage: build
+
+%setup
+
+%environment
+    export PATH="/root/.local/bin:$PATH"
+    export POETRY_VIRTUALENVS_PATH=/bs/virtualenvs
+    export POETRY_HOME=/bs/poetry
+    export GH_TOKEN=$GH_TOKEN
+
+
+%post -c /bin/bash
+    mkdir /bs
+    export POETRY_VIRTUALENVS_PATH=/bs/virtualenvs
+    export DEBIAN_FRONTEND=noninteractive
+    export POETRY_HOME=/bs/poetry
+    export TZ=Etc/UTC
+    export GH_TOKEN=$GH_TOKEN
+    apt-get update && apt-get -y install software-properties-common curl unzip gzip
+    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+    add-apt-repository ppa:deadsnakes/ppa
+    apt-get update
+    apt-get -y install python3-pip python3-wheel git python3.11 python3.11-dev python3.11-venv curl python3.8 python3.8-dev python3.8-venv libc6 gh
+    curl -sSL https://install.python-poetry.org | python3.11 -
+    export PATH="/bs/poetry/bin:$PATH"
+    cd /bs
+    gh repo clone https://github.com/LeoIV/bounce.git
+    cd bounce
+    poetry env use python3.11
+    poetry install
+    # download slice localization data
+    curl -O https://archive.ics.uci.edu/static/public/206/relative+location+of+ct+slices+on+axial+axis.zip
+    unzip relative+location+of+ct+slices+on+axial+axis.zip && rm relative+location+of+ct+slices+on+axial+axis.zip
+    mv slice_localization_data.csv data/
+    # download maxsat60 instance
+    curl -O http://www.maxsat.udl.cat/11/benchs/wms_crafted.tgz
+    tar -xzf wms_crafted.tgz && rm wms_crafted.tgz
+    mv wms_crafted/frb/frb10-6-4.wcnf data/maxsat/
+    rm -rf wms_crafted
+    # download maxsat125 instance
+    pip install gdown
+    gdown https://drive.google.com/uc?id=1etCcts1icVJqD8KPsCH2rlHAOkf-ucj2 -O ce.zip
+    unzip ce.zip && rm ce.zip
+    mv mse18-new/cluster-expansion/benchmarks/IS1_5.0.5.0.0.5_softer_periodic.wcnf.gz .
+    rm -rf mse18-new
+    gunzip IS1_5.0.5.0.0.5_softer_periodic.wcnf.gz
+    mv IS1_5.0.5.0.0.5_softer_periodic.wcnf data/maxsat/cluster-expansion-IS1_5.0.5.0.0.5_softer_periodic.wcnf
+    echo 'PRINTING DATA DIRECTORY'
+    ls data
+    echo 'PRINTING MAXSAT DIRECTORY'
+    ls data/maxsat
+    cd /bs
+    git clone https://github.com/LeoIV/BenchSuite.git
+    cd BenchSuite
+    # poetry config installer.parallel false --local
+    git checkout no-mujoco
+    cd data/svm
+    gzip -d CT_slice_*
+    cd ../..
+    poetry env use python3.8
+    poetry install
+
+%runscript
+    echo "Container was created"
+    echo "Arguments received: $*"
+    bash -c "PATH='/bs/poetry/bin:$PATH' cd /bs/bounce && PATH='/bs/poetry/bin:$PATH' poetry run python3 main.py $*"
+
+%startscript
+
+%test
+
+%labels
+    Author leonard.papenmeier@cs.lth.se
+    Version v0.0.1
+
+%help
+    This is a container for Bounce

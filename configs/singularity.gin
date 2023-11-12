@@ -1,0 +1,5 @@
+include 'path/to/another/file.gin'
+
+# Singularity config
+
+# SingularityBenchmark.singularity_image_path = "/bs/BenchSuite"

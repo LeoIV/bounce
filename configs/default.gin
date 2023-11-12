@@ -1,0 +1,73 @@
+import bounce.bounce
+import bounce.trust_region
+import bounce.benchmarks
+import bounce.projection
+import bounce.gaussian_process
+import torch
+
+# Macros
+
+FUNCTION_DIMENSIONALITY = 50
+DTYPE = "float64"
+DEVICE = "cuda"
+
+
+Benchmark.flip = True
+
+# Contamination config
+
+Contamination.ambient_dim = 100
+Contamination.effective_dim = 25
+
+# PestControl config
+
+PestControl.ambient_dim = 25
+PestControl.n_stages = 25
+
+# MaxSat config
+
+MaxSat.normalize_weights = True
+
+# GP config
+
+get_gp.lengthscale_prior_shape = 1.5
+get_gp.lengthscale_prior_rate = 0.1
+get_gp.outputscale_prior_shape = 1.5
+get_gp.outputscale_prior_rate = 0.5
+get_gp.noise_prior_shape = 1.1
+get_gp.noise_prior_rate=0.05
+
+# TR config
+
+TrustRegion.length_init_discrete = 10
+
+# SVM config
+
+SVMMixed.n_features = 50
+
+# Bounce configuration
+
+Bounce.number_initial_points = 5
+Bounce.initial_target_dimensionality = 5
+Bounce.number_new_bins_on_split = 2
+Bounce.maximum_number_evaluations = 200
+Bounce.batch_size = 1
+Bounce.benchmark = @MaxSat60()
+Bounce.results_dir = "results"
+Bounce.device = %DEVICE
+Bounce.dtype = %DTYPE
+Bounce.use_scipy_lbfgs = True
+Bounce.maximum_number_evaluations_until_input_dim = 100
+
+# Benchmark configuration
+
+AckleyEffectiveDim.dim = %FUNCTION_DIMENSIONALITY
+ShiftedAckley10.dim = %FUNCTION_DIMENSIONALITY
+RosenbrockEffectiveDim.dim = %FUNCTION_DIMENSIONALITY
+HartmannEffectiveDim.dim = %FUNCTION_DIMENSIONALITY
+BraninEffectiveDim.dim = %FUNCTION_DIMENSIONALITY
+LevyEffectiveDim.dim = %FUNCTION_DIMENSIONALITY
+DixonPriceEffectiveDim.dim = %FUNCTION_DIMENSIONALITY
+GriewankEffectiveDim.dim = %FUNCTION_DIMENSIONALITY
+MichalewiczEffectiveDim.dim = %FUNCTION_DIMENSIONALITY
+RastriginEffectiveDim.dim = %FUNCTION_DIMENSIONALITY

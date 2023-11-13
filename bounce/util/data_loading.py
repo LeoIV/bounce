@@ -15,7 +15,11 @@ def download_uci_data():
 
         url = "https://archive.ics.uci.edu/static/public/206/relative+location+of+ct+slices+on+axial+axis.zip"
         logging.info(f"Downloading {url}")
-        urllib.request.urlretrieve(url, "data/slice_localization_data.zip")
+
+        response = requests.get(url, verify=False)
+
+        with open("data/slice_localization_data.zip", "wb") as file:
+            file.write(response.content)
         logging.info("Download completed.")
         import zipfile
 
@@ -33,7 +37,11 @@ def download_maxsat60_data():
 
         url = "http://www.maxsat.udl.cat/11/benchs/wms_crafted.tgz"
         logging.info(f"Downloading {url}")
-        urllib.request.urlretrieve(url, "data/maxsat/wms_crafted.tgz")
+
+        response = requests.get(url, verify=False)
+
+        with open("data/maxsat/wms_crafted.tgz", "wb") as file:
+            file.write(response.content)
 
         import tarfile
 
@@ -54,7 +62,7 @@ def download_maxsat60_data():
 
 def download_maxsat125_data():
     if not pathlib.Path(
-        "data/maxsat/cluster-expansion-IS1_5.0.5.0.0.5_softer_periodic.wcnf"
+            "data/maxsat/cluster-expansion-IS1_5.0.5.0.0.5_softer_periodic.wcnf"
     ).exists():
         logging.info(
             "cluster-expansion-IS1_5.0.5.0.0.5_softer_periodic.wcnf not found. Downloading..."
@@ -76,13 +84,13 @@ def download_maxsat125_data():
         import gzip, shutil
 
         with gzip.open(
-            "data/maxsat/mse18-new/cluster-expansion/benchmarks/IS1_5.0.5.0.0.5_softer_periodic.wcnf.gz",
-            "rb",
+                "data/maxsat/mse18-new/cluster-expansion/benchmarks/IS1_5.0.5.0.0.5_softer_periodic.wcnf.gz",
+                "rb",
         ) as f_in:
             # save to data/maxsat/cluster-expansion-IS1_5.wcnf
             with open(
-                "data/maxsat/cluster-expansion-IS1_5.0.5.0.0.5_softer_periodic.wcnf",
-                "wb",
+                    "data/maxsat/cluster-expansion-IS1_5.0.5.0.0.5_softer_periodic.wcnf",
+                    "wb",
             ) as f_out:
                 shutil.copyfileobj(f_in, f_out)
 
@@ -94,7 +102,7 @@ def download_maxsat125_data():
 
 
 def load_uci_data(
-    n_features: Optional[int] = None,
+        n_features: Optional[int] = None,
 ):
     # taken from the BODi paper (https://arxiv.org/pdf/2303.01774.pdf)
 
@@ -125,8 +133,8 @@ def load_uci_data(
 
     # Only keep 10,000 data points and n_features features
     shuffled_indices = np.random.RandomState(0).permutation(X.shape[0])[
-        :10_000
-    ]  # Use seed 0
+                       :10_000
+                       ]  # Use seed 0
     X, y = X[shuffled_indices], y[shuffled_indices]
 
     if n_features is not None:

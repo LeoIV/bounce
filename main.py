@@ -37,7 +37,7 @@ if __name__ == "__main__":
     then = time.time()
     parser = argparse.ArgumentParser(
         prog=BOUNCE_NAME,
-        description="Bounce: a Reliable Bayesian Optimization Algorithm for Combinatorial and Mixed Spaces",
+        description="Bounce: Reliable High-Dimensional Bayesian Optimization Algorithm for Combinatorial and Mixed Spaces",
         epilog="For more information, please contact the author.",
     )
 

@@ -20,7 +20,7 @@ BOUNCE_NAME = """
     \t / /_/ / /_/ / /_/ / / / / /__/  __/
     \t/_____/\____/\__,_/_/ /_/\___/\___/
     
-    [ Bounce: a Reliable Bayesian Optimization     ] 
+    [ Bounce: Reliable High-Dimensional Bayesian Optimization     ] 
     [ Algorithm for Combinatorial and Mixed Spaces ]
     """
 

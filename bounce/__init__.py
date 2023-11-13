@@ -1,12 +1,12 @@
 r"""
 # What is this?
-This is the documentation for the accompanying Python package for the paper [*"Bounce: a Reliable Bayesian Optimization Algorithm for Combinatorial and Mixed Spaces"*](https://arxiv.org/pdf/2307.00618.pdf)  by Leonard Papenmeier, Luigi Nardi, and Matthias Poloczek.
+This is the documentation for the accompanying Python package for the paper [*"Bounce: Reliable High-Dimensional Bayesian Optimization Algorithm for Combinatorial and Mixed Spaces"*](https://arxiv.org/pdf/2307.00618.pdf)  by Leonard Papenmeier, Luigi Nardi, and Matthias Poloczek.
 
 If you use this package, please cite the paper as follows:
 ```bibtex
 @inproceedings{
 papenmeier2023bounce,
-    title = {Bounce: a Reliable Bayesian Optimization Algorithm for Combinatorial and Mixed Spaces},
+    title = {Bounce: Reliable High-Dimensional Bayesian Optimization Algorithm for Combinatorial and Mixed Spaces},
     author = {Leonard Papenmeier and Luigi Nardi and Matthias Poloczek},
     booktitle = {Advances in Neural Information Processing Systems},
     year = {2023},

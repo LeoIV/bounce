@@ -37,4 +37,5 @@ jobs:
           password: ${{ secrets.EMAIL_PASSWORD }}
           subject: GitHub Action Failed
           body: ${{ github.repository }} failed on ${{ github.sha }}
-          to: leonard.papenmeier@gmail.com
+          to: ${{ secrets.EMAIL_USERNAME }}
+          from: ${{ secrets.EMAIL_USERNAME }}

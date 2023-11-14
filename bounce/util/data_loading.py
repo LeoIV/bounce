@@ -11,11 +11,11 @@ from xgboost import XGBRegressor
 def download_uci_data():
     if not pathlib.Path("data/slice_localization_data.csv").exists():
         logging.info("slice_localization_data.csv not found. Downloading...")
-        import urllib.request
 
         url = "https://archive.ics.uci.edu/static/public/206/relative+location+of+ct+slices+on+axial+axis.zip"
         logging.info(f"Downloading {url}")
 
+        import requests
         response = requests.get(url, verify=False)
 
         with open("data/slice_localization_data.zip", "wb") as file:
@@ -33,11 +33,11 @@ def download_uci_data():
 def download_maxsat60_data():
     if not pathlib.Path("data/maxsat/frb10-6-4.wcnf").exists():
         logging.info("frb10-6-4.wcnf not found. Downloading...")
-        import urllib.request
 
         url = "http://www.maxsat.udl.cat/11/benchs/wms_crafted.tgz"
         logging.info(f"Downloading {url}")
 
+        import requests
         response = requests.get(url, verify=False)
 
         with open("data/maxsat/wms_crafted.tgz", "wb") as file:

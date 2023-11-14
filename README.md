@@ -4,7 +4,7 @@
 
 # Bounce
 
-This is the implementation of the Bounce algorithm for the paper ["Bounce: Reliable High-Dimensional Bayesian Optimization Algorithm for
+This is the implementation of the Bounce algorithm for the paper ["Bounce: Reliable High-Dimensional Bayesian Optimization for
 Combinatorial and Mixed Spaces"](https://arxiv.org/abs/2307.00618).
 
 ### Citation
@@ -13,7 +13,7 @@ Please cite our paper if you use Bounce in your work:
 ```bibtex
 @inproceedings{
 papenmeier2023bounce,
-    title = {Bounce: Reliable High-Dimensional Bayesian Optimization Algorithm for Combinatorial and Mixed Spaces},
+    title = {Bounce: Reliable High-Dimensional Bayesian Optimization for Combinatorial and Mixed Spaces},
     author = {Leonard Papenmeier and Luigi Nardi and Matthias Poloczek},
     booktitle = {Advances in Neural Information Processing Systems},
     year = {2023},

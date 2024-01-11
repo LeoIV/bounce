@@ -12,7 +12,7 @@ def download_uci_data():
     if not pathlib.Path("data/slice_localization_data.csv").exists():
         logging.info("slice_localization_data.csv not found. Downloading...")
 
-        url = "https://archive.ics.uci.edu/static/public/206/relative+location+of+ct+slices+on+axial+axis.zip"
+        url = "http://bounce-resources.s3-website-us-east-1.amazonaws.com/slice_localization_data.zip"
         logging.info(f"Downloading {url}")
 
         import requests
@@ -34,7 +34,7 @@ def download_maxsat60_data():
     if not pathlib.Path("data/maxsat/frb10-6-4.wcnf").exists():
         logging.info("frb10-6-4.wcnf not found. Downloading...")
 
-        url = "http://www.maxsat.udl.cat/11/benchs/wms_crafted.tgz"
+        url = "http://bounce-resources.s3-website-us-east-1.amazonaws.com/wms_crafted.tgz"
         logging.info(f"Downloading {url}")
 
         import requests
@@ -67,13 +67,15 @@ def download_maxsat125_data():
         logging.info(
             "cluster-expansion-IS1_5.0.5.0.0.5_softer_periodic.wcnf not found. Downloading..."
         )
-        import gdown
+        import requests
 
-        # download https://drive.google.com/file/d/1etCcts1icVJqD8KPsCH2rlHAOkf-ucj2
-        url = "https://drive.google.com/uc?id=1etCcts1icVJqD8KPsCH2rlHAOkf-ucj2"
+        url = "http://bounce-resources.s3-website-us-east-1.amazonaws.com/mse18-new.zip"
         logging.info(f"Downloading {url}")
 
-        gdown.download(url, "data/maxsat/ce.zip", quiet=False)
+        response = requests.get(url, verify=False)
+
+        with open("data/maxsat/ce.zip", "wb") as file:
+            file.write(response.content)
 
         import zipfile
 

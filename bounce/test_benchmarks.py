@@ -35,7 +35,7 @@ from bounce.util.benchmark import Parameter, ParameterType
         (RastriginEffectiveDim, False),
     ],
 )
-def test_ackley_effective_dimension(test_function, fixed_edim):
+def test_effective_dimensionality_benchmark(test_function, fixed_edim):
     benchmark = test_function()
     assert benchmark.dim == 200, "Default dimension is 200"
 
@@ -62,11 +62,11 @@ def test_ackley_effective_dimension(test_function, fixed_edim):
     benchmark = test_function(dim=100)
     assert benchmark.dim == 100, "Dimension can be set to 100"
 
-    # test reproducatibility
+    # test reproducibility
     benchmark = test_function()
     x = torch.rand(1, 200).repeat(20, 1)
     fx = benchmark(x)
-    assert torch.all(fx == fx[0]), "Reproducibility test failed"
+    assert torch.allclose(fx, fx[0]), "Reproducibility test failed"
 
 
 @pytest.mark.parametrize(

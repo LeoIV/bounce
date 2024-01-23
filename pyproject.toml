@@ -9,7 +9,7 @@ packages = [{ include = "bounce" }]
 [tool.poetry.dependencies]
 python = "^3.10"
 numpy = "*"
-torch = "2.0.0"
+torch = "^2.0.0"
 botorch = "^0.8.2"
 gin-config = "^0.5.0"
 pandas = "^1.5.3"

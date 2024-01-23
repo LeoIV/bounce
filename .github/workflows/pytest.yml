@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [ "3.10", "3.11" ]
+        python-version: [ "3.10", "3.11", "3.12" ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -27,7 +27,6 @@ jobs:
       - name: Test with pytest
         uses: nick-fields/retry@v2
         with:
-          timeout_seconds: 5
           max_attempts: 3
           command: |
             poetry run pytest

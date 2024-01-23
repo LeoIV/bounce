@@ -33,30 +33,25 @@ Stage: build
     poetry env use python3.11
     poetry install
     # download slice localization data
-    curl -O https://archive.ics.uci.edu/static/public/206/relative+location+of+ct+slices+on+axial+axis.zip
-    unzip relative+location+of+ct+slices+on+axial+axis.zip && rm relative+location+of+ct+slices+on+axial+axis.zip
+    curl -O http://bounce-resources.s3-website-us-east-1.amazonaws.com/slice_localization_data.zip
+    unzip slice_localization_data.zip && rm slice_localization_data.zip
     mv slice_localization_data.csv data/
     # download maxsat60 instance
-    curl -O http://www.maxsat.udl.cat/11/benchs/wms_crafted.tgz
+    curl -O http://bounce-resources.s3-website-us-east-1.amazonaws.com/wms_crafted.tgz
     tar -xzf wms_crafted.tgz && rm wms_crafted.tgz
     mv wms_crafted/frb/frb10-6-4.wcnf data/maxsat/
     rm -rf wms_crafted
     # download maxsat125 instance
-    pip install gdown
-    gdown https://drive.google.com/uc?id=1etCcts1icVJqD8KPsCH2rlHAOkf-ucj2 -O ce.zip
-    unzip ce.zip && rm ce.zip
+    curl -O http://bounce-resources.s3-website-us-east-1.amazonaws.com/mse18-new.zip
+    unzip mse18-new.zip && rm mse18-new.zip
     mv mse18-new/cluster-expansion/benchmarks/IS1_5.0.5.0.0.5_softer_periodic.wcnf.gz .
     rm -rf mse18-new
     gunzip IS1_5.0.5.0.0.5_softer_periodic.wcnf.gz
     mv IS1_5.0.5.0.0.5_softer_periodic.wcnf data/maxsat/cluster-expansion-IS1_5.0.5.0.0.5_softer_periodic.wcnf
-    echo 'PRINTING DATA DIRECTORY'
-    ls data
-    echo 'PRINTING MAXSAT DIRECTORY'
     ls data/maxsat
     cd /bs
     git clone https://github.com/LeoIV/BenchSuite.git
     cd BenchSuite
-    # poetry config installer.parallel false --local
     git checkout no-mujoco
     cd data/svm
     gzip -d CT_slice_*

@@ -15,7 +15,6 @@ gin-config = "^0.5.0"
 pandas = "^1.5.3"
 xgboost = "^1.7.5"
 coverage = "^7.2.5"
-gdown = "^4.7.1"
 requests = "^2.31.0"
 
 [tool.poetry.group.dev.dependencies]

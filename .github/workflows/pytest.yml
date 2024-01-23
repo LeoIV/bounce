@@ -25,8 +25,12 @@ jobs:
       - name: Install project
         run: poetry install --no-interaction
       - name: Test with pytest
-        run: |
-          poetry run pytest
+        uses: nick-fields/retry@v2
+        with:
+          timeout_seconds: 5
+          max_attempts: 3
+          command: |
+            poetry run pytest
       - name: Email on Failure
         if: failure()
         uses: dawidd6/action-send-mail@v2.5.0

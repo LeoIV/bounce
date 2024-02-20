@@ -21,18 +21,18 @@ from bounce.util.benchmark import ParameterType
 
 @gin.configurable
 def get_gp(
-    axus: AxUS,
-    x: Tensor,
-    fx: Tensor,
-    lengthscale_prior_shape: float = 3,
-    lengthscale_prior_rate: float = 6,
-    outputscale_prior_shape: float = 2,
-    outputscale_prior_rate: float = 0.15,
-    noise_prior_shape: float = 1.1,
-    noise_prior_rate: float = 2,
-    lamda: Optional[float] = None,
-    discrete_ard: bool = False,
-    continuous_ard: bool = True,
+        axus: AxUS,
+        x: Tensor,
+        fx: Tensor,
+        lengthscale_prior_shape: float = 1.5,
+        lengthscale_prior_rate: float = 0.1,
+        outputscale_prior_shape: float = 1.5,
+        outputscale_prior_rate: float = 0.5,
+        noise_prior_shape: float = 1.1,
+        noise_prior_rate: float = 0.05,
+        lamda: Optional[float] = None,
+        discrete_ard: bool = False,
+        continuous_ard: bool = True,
 ) -> tuple[SingleTaskGP, Tensor, Tensor]:
     """
     Define the GP model.
@@ -122,11 +122,11 @@ def get_gp(
 
 
 def fit_mll(
-    model: SingleTaskGP,
-    train_x: Tensor,
-    train_fx: Tensor,
-    max_cholesky_size: int = 1000,
-    use_scipy_lbfgs: bool = True,
+        model: SingleTaskGP,
+        train_x: Tensor,
+        train_fx: Tensor,
+        max_cholesky_size: int = 1000,
+        use_scipy_lbfgs: bool = True,
 ) -> None:
     """
     Fit the GP model. If the LBFGS optimizer fails, use the Adam optimizer.

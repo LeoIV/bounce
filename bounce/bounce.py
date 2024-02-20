@@ -41,23 +41,23 @@ class Bounce:
     """
 
     def __init__(
-        self,
-        benchmark: Benchmark,
-        number_initial_points: int,
-        initial_target_dimensionality: int,
-        number_new_bins_on_split: int,
-        maximum_number_evaluations: int,
-        batch_size: int,
-        results_dir: str,
-        desired_final_dimensionality: Optional[int] = None,
-        maximum_number_evaluations_until_input_dim: Optional[int] = None,
-        max_cholesky_size: int = 1000,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        dtype: Optional[str] = None,
-        use_scipy_lbfgs: bool = True,
-        max_lbfgs_iters: Optional[int] = None,
-        min_cuda: int = 10,
-        n_interleaved: int = 5,
+            self,
+            benchmark: Benchmark,
+            number_initial_points: int,
+            initial_target_dimensionality: int,
+            number_new_bins_on_split: int,
+            maximum_number_evaluations: int,
+            batch_size: int,
+            results_dir: str,
+            desired_final_dimensionality: Optional[int] = None,
+            maximum_number_evaluations_until_input_dim: Optional[int] = None,
+            max_cholesky_size: int = 1000,
+            device: str = "cuda" if torch.cuda.is_available() else "cpu",
+            dtype: Optional[str] = None,
+            use_scipy_lbfgs: bool = True,
+            max_lbfgs_iters: Optional[int] = None,
+            min_cuda: int = 10,
+            n_interleaved: int = 5,
     ):
         """
         Init
@@ -178,8 +178,8 @@ class Bounce:
             )
         else:
             assert (
-                maximum_number_evaluations_until_input_dim
-                <= self.maximum_number_evaluations
+                    maximum_number_evaluations_until_input_dim
+                    <= self.maximum_number_evaluations
             )
             self.maximum_number_evaluations_until_input_dim = (
                 maximum_number_evaluations_until_input_dim
@@ -249,7 +249,9 @@ class Bounce:
             i.item(): self._split_budget(i.item()) for i in all_target_dims
         }
 
-    def _reset_local_data(self):
+    def _reset_local_data(
+            self
+    ):
         # saving tr local data
         self.x_tr = torch.empty(0, self.random_embedding.target_dim, dtype=self.dtype)
         self.x_up_tr = torch.empty(
@@ -257,7 +259,9 @@ class Bounce:
         )
         self.fx_tr = torch.empty(0, dtype=self.dtype)
 
-    def _adjust_number_bins_on_split(self):
+    def _adjust_number_bins_on_split(
+            self
+    ):
         """
         Adjusts the number of new bins on split to the number of new bins that minimizes the difference between the
         true final target dimensionality and the desired final dimensionality.
@@ -277,14 +281,14 @@ class Bounce:
             possible_bin_sizes = torch.tensor([1])
 
         best_bin_size = (
-            torch.argmin(
-                torch.abs(
-                    self.initial_target_dimensionality
-                    * (1 + possible_bin_sizes) ** self._n_splits
-                    - self.desired_final_dimensionality
+                torch.argmin(
+                    torch.abs(
+                        self.initial_target_dimensionality
+                        * (1 + possible_bin_sizes) ** self._n_splits
+                        - self.desired_final_dimensionality
+                    )
                 )
-            )
-            + 1
+                + 1
         )
         if best_bin_size != self.number_new_bins_on_split:
             logging.debug(
@@ -299,7 +303,10 @@ class Bounce:
                 )
             )
 
-    def _split_budget(self, target_dimensionality: int) -> int:
+    def _split_budget(
+            self,
+            target_dimensionality: int
+    ) -> int:
         """
         Calculates the number of evaluations to be used for the split with target_dimensionality.
 
@@ -311,7 +318,7 @@ class Bounce:
 
         """
         total_budget = (
-            self.maximum_number_evaluations_until_input_dim - self.number_initial_points
+                self.maximum_number_evaluations_until_input_dim - self.number_initial_points
         )
 
         if target_dimensionality >= self.benchmark.dim:
@@ -322,13 +329,15 @@ class Bounce:
         split_budget = round(
             -(self.number_new_bins_on_split * total_budget * target_dimensionality)
             / (
-                self.initial_target_dimensionality
-                * (1 - (self.number_new_bins_on_split + 1) ** (self._n_splits + 1))
+                    self.initial_target_dimensionality
+                    * (1 - (self.number_new_bins_on_split + 1) ** (self._n_splits + 1))
             )
         )
-        return min(2**target_dimensionality, split_budget)
+        return min(2 ** target_dimensionality, split_budget)
 
-    def sample_init(self):
+    def sample_init(
+            self
+    ):
         """
         Samples the initial points, evaluates them, and adds them to the observations.
         Increases the number of evaluations by the number of initial points.
@@ -399,7 +408,9 @@ class Bounce:
 
         self._n_evals += self.number_initial_points
 
-    def run(self):
+    def run(
+            self
+    ):
         """
         Runs the algorithm.
 
@@ -435,7 +446,7 @@ class Bounce:
             )
 
             use_scipy_lbfgs = self.use_scipy_lbfgs and (
-                self.max_lbfgs_iters is None or len(train_x) <= self.max_lbfgs_iters
+                    self.max_lbfgs_iters is None or len(train_x) <= self.max_lbfgs_iters
             )
             fit_mll(
                 model=model,
@@ -492,8 +503,8 @@ class Bounce:
                     [
                         i
                         for b, i in axus.bins_and_indices_of_type(
-                            ParameterType.CONTINUOUS
-                        )
+                        ParameterType.CONTINUOUS
+                    )
                     ]
                 )
                 x_best = None
@@ -597,7 +608,7 @@ class Bounce:
             remaining_budget = max(remaining_budget, 1)
             tr = self.trust_region
             factor = (tr.length_min_discrete / tr.length_discrete_continuous) ** (
-                1 / remaining_budget
+                    1 / remaining_budget
             )
             factor **= self.batch_size
             factor = np.clip(factor, a_min=1e-10, a_max=None)
@@ -616,7 +627,7 @@ class Bounce:
             )
 
             self._all_split_budgets[tr_dim] = (
-                self._all_split_budgets[tr_dim] - self.batch_size
+                    self._all_split_budgets[tr_dim] - self.batch_size
             )
             self._n_evals += self.batch_size
 
@@ -681,7 +692,9 @@ class Bounce:
             )
 
     @property
-    def _forecasted_tr_dim(self) -> int:
+    def _forecasted_tr_dim(
+            self
+    ) -> int:
         """
         Calculate the estimated trust region dimensionality.
 
@@ -691,14 +704,14 @@ class Bounce:
         """
 
         return self.initial_target_dimensionality * (
-            1 + self.number_new_bins_on_split
+                1 + self.number_new_bins_on_split
         ) ** (self.tr_splits)
 
     def _add_data_to_tr_observations(
-        self,
-        xs_down: torch.Tensor,
-        xs_up: torch.Tensor,
-        fxs: torch.Tensor,
+            self,
+            xs_down: torch.Tensor,
+            xs_up: torch.Tensor,
+            fxs: torch.Tensor,
     ):
         """
         Add data to the tr local observations and save the selected trust regions to disk.
@@ -739,10 +752,10 @@ class Bounce:
         )
 
     def _add_data_to_global_observations(
-        self,
-        xs_down: torch.Tensor,
-        xs_up: torch.Tensor,
-        fxs: torch.Tensor,
+            self,
+            xs_down: torch.Tensor,
+            xs_up: torch.Tensor,
+            fxs: torch.Tensor,
     ):
         """
         Add data to the global observations and save the selected trust regions to disk.
@@ -777,8 +790,8 @@ class Bounce:
         )
 
     def save_tr_state(
-        self,
-        tr_state: dict[str, Union[float, np.ndarray]],
+            self,
+            tr_state: dict[str, Union[float, np.ndarray]],
     ):
         """
         Save the trust region state to disk.

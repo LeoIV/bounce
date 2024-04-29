@@ -1,45 +1,30 @@
-name: pytest
+name: Test (main, conda, python 3.9)
+
 on:
-  push:
+  pull_request:
     branches:
-      - '*'
-  schedule:
-    - cron: '0 0 * * *'
+      - main
 
 jobs:
-  build:
+  build-linux:
     runs-on: ubuntu-latest
     strategy:
-      matrix:
-        python-version: [ "3.10", "3.11" ]
+      max-parallel: 5
+
     steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.ref }}
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-      - name: Install project
-        run: poetry install --no-interaction
-      - name: Test with pytest
-        uses: nick-fields/retry@v2
-        with:
-          max_attempts: 3
-          timeout_minutes: 15
-          command: |
-            poetry run pytest
-      - name: Email on Failure
-        if: failure()
-        uses: dawidd6/action-send-mail@v2.5.0
-        with:
-          server_address: smtp.gmail.com
-          server_port: 587
-          username: ${{ secrets.EMAIL_USERNAME }}
-          password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: GitHub Action Failed
-          body: ${{ github.repository }} failed on ${{ github.sha }}
-          to: ${{ secrets.EMAIL_USERNAME }}
-          from: ${{ secrets.EMAIL_USERNAME }}
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.10'
+    - name: Add conda to system path
+      run: |
+        # $CONDA is an environment variable pointing to the root of the miniconda directory
+        echo $CONDA/bin >> $GITHUB_PATH
+    - name: Install dependencies
+      run: |
+        conda env create -f environment.yml
+        conda run -n bounce pip install -e .
+    - name: Test with pytest
+      run: |
+        conda run -n bounce pytest

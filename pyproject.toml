@@ -1,28 +1,3 @@
-[tool.poetry]
-name = "bounce"
-version = "0.1.0"
-description = ""
-authors = ["Leonard Papenmeier <leonard.papenmeier@posteo.de>"]
-readme = "README.md"
-packages = [{ include = "bounce" }]
-
-[tool.poetry.dependencies]
-python = "^3.10"
-numpy = "*"
-torch = "2.0.0"
-botorch = "^0.8.2"
-gin-config = "^0.5.0"
-pandas = "^1.5.3"
-xgboost = "^1.7.5"
-coverage = "^7.2.5"
-requests = "^2.31.0"
-
-[tool.poetry.group.dev.dependencies]
-black = "^22.12.0"
-memray = "^1.6.0"
-pytest = "^7.3.1"
-coverage = "^7.2.5"
-
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools<=68"]
+build-backend = "setuptools.build_meta"

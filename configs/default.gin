@@ -9,7 +9,7 @@ import torch
 
 FUNCTION_DIMENSIONALITY = 50
 DTYPE = "float64"
-DEVICE = "cuda"
+DEVICE = "cpu"
 
 
 Benchmark.flip = True
